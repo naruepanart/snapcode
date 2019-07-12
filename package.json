@@ -1,14 +1,15 @@
 {
-  "name": "polacode",
-  "displayName": "Polacode",
-  "description": "📸  Polaroid for your code",
-  "version": "1.1.0",
+  "name": "snapcode",
+  "displayName": "Snapcode",
+  "description": "📸  Snapcode for your code",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/octref/polacode.git"
+    "url": "https://github.com/moyus/snapcode.git"
   },
-  "publisher": "pnp",
+  "publisher": "moyu",
   "keywords": [
+    "snapcode",
     "polacode",
     "polaroid",
     "screenshot",
@@ -34,8 +35,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "polacode.activate",
-        "title": "Polacode 📸"
+        "command": "snapcode.activate",
+        "title": "Snapcode 📸"
       }
     ],
     "configuration": {

@@ -1,6 +1,4 @@
-<p>
-  <h2 align="center">Polacode — Polaroid for your code 📸</h2>
-</p>
+# Snapcode
 
 This is a customized fork of [octref/polacode](https://github.com/octref/polacode)
 
