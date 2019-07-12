@@ -2,7 +2,7 @@
   "name": "snapcode",
   "displayName": "Snapcode",
   "description": "📸  Snapcode for your code",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/moyus/snapcode.git"
@@ -28,8 +28,8 @@
     "vscode": "^1.32.0"
   },
   "activationEvents": [
-    "onCommand:polacode.activate",
-    "onWebviewPanel:polacode"
+    "onCommand:snapcode.activate",
+    "onWebviewPanel:snapcode"
   ],
   "main": "./src/extension",
   "contributes": {
@@ -40,25 +40,25 @@
       }
     ],
     "configuration": {
-      "title": "Polacode",
+      "title": "Snapcode",
       "properties": {
-        "polacode.shadow": {
+        "snapcode.shadow": {
           "type": "string",
           "description": "Shadow of the snippet node. Use any value for CSS `box-shadow`",
-          "default": "rgba(0, 0, 0, 0.55) 0px 20px 68px"
+          "default": "rgba(0, 0, 0, 0.3) 0px 15px 30px"
         },
-        "polacode.transparentBackground": {
+        "snapcode.transparentBackground": {
           "type": "boolean",
           "description": "Transparent background for containers",
           "default": false
         },
-        "polacode.backgroundColor": {
+        "snapcode.backgroundColor": {
           "type": "string",
           "description": "Background color of snippet container. Use any value for CSS `background-color`",
           "format": "color-hex",
-          "default": "#f2f2f2"
+          "default": "#fff"
         },
-        "polacode.target": {
+        "snapcode.target": {
           "type": "string",
           "description": "Shoot with or without container",
           "default": "container",
@@ -68,7 +68,7 @@
           ],
           "enumDescriptions": [
             "Shoot with the container.",
-            "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"polacode.transparentBackground\": true`"
+            "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"snapcode.transparentBackground\": true`"
           ]
         }
       }
