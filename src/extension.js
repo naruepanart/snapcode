@@ -8,7 +8,7 @@ const writeSerializedBlobToFile = (serializeBlob, fileName) => {
   fs.writeFileSync(fileName, Buffer.from(bytes))
 }
 
-const P_TITLE = 'Polacode 📸'
+const P_TITLE = 'Snapcode 📸'
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -19,14 +19,14 @@ function activate(context) {
   let lastUsedImageUri = vscode.Uri.file(path.resolve(homedir(), 'Desktop/code.png'))
   let panel
 
-  vscode.window.registerWebviewPanelSerializer('polacode', {
+  vscode.window.registerWebviewPanelSerializer('snapcode', {
     async deserializeWebviewPanel(_panel, state) {
       panel = _panel
       panel.webview.html = getHtmlContent(htmlPath)
       panel.webview.postMessage({
         type: 'restore',
         innerHTML: state.innerHTML,
-        bgColor: context.globalState.get('polacode.bgColor', '#2e3440')
+        bgColor: context.globalState.get('snapcode.bgColor', '#2e3440')
       })
       const selectionListener = setupSelectionSync()
       panel.onDidDispose(() => {
@@ -36,8 +36,8 @@ function activate(context) {
     }
   })
 
-  vscode.commands.registerCommand('polacode.activate', () => {
-    panel = vscode.window.createWebviewPanel('polacode', P_TITLE, 2, {
+  vscode.commands.registerCommand('snapcode.activate', () => {
+    panel = vscode.window.createWebviewPanel('snapcode', P_TITLE, 2, {
       enableScripts: true,
       localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'webview'))]
     })
@@ -52,7 +52,7 @@ function activate(context) {
     setupMessageListeners()
 
     const fontFamily = vscode.workspace.getConfiguration('editor').fontFamily
-    const bgColor = context.globalState.get('polacode.bgColor', '#2e3440')
+    const bgColor = context.globalState.get('snapcode.bgColor', '#2e3440')
     panel.webview.postMessage({
       type: 'init',
       fontFamily,
@@ -63,7 +63,7 @@ function activate(context) {
   })
 
   vscode.workspace.onDidChangeConfiguration(e => {
-    if (e.affectsConfiguration('polacode') || e.affectsConfiguration('editor')) {
+    if (e.affectsConfiguration('snapcode') || e.affectsConfiguration('editor')) {
       syncSettings()
     }
   })
@@ -89,13 +89,13 @@ function activate(context) {
         case 'getAndUpdateCacheAndSettings':
           panel.webview.postMessage({
             type: 'restoreBgColor',
-            bgColor: context.globalState.get('polacode.bgColor', '#2e3440')
+            bgColor: context.globalState.get('snapcode.bgColor', '#2e3440')
           })
 
           syncSettings()
           break
         case 'updateBgColor':
-          context.globalState.update('polacode.bgColor', data.bgColor)
+          context.globalState.update('snapcode.bgColor', data.bgColor)
           break
         case 'invalidPasteContent':
           vscode.window.showInformationMessage(
@@ -107,7 +107,7 @@ function activate(context) {
   }
 
   function syncSettings() {
-    const settings = vscode.workspace.getConfiguration('polacode')
+    const settings = vscode.workspace.getConfiguration('snapcode')
     const editorSettings = vscode.workspace.getConfiguration('editor', null)
     panel.webview.postMessage({
       type: 'updateSettings',
