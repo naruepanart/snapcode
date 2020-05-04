@@ -1,31 +1,29 @@
 ;(function() {
   const vscode = acquireVsCodeApi()
 
-  let target = 'container'
-  let transparentBackground = false
-  let backgroundColor = '#fff'
-
   vscode.postMessage({
     type: 'getAndUpdateCacheAndSettings'
   })
 
   const snippetNode = document.getElementById('snippet')
+  const sizeNode = document.getElementById('size')
   const snippetContainerNode = document.getElementById('snippet-container')
   const obturateur = document.getElementById('save')
 
   snippetContainerNode.style.opacity = '1'
-  const oldState = vscode.getState();
+  const oldState = vscode.getState()
   if (oldState && oldState.innerHTML) {
     snippetNode.innerHTML = oldState.innerHTML
   }
 
-  const getInitialHtml = fontFamily => {
+  function getInitialHtml(fontFamily) {
     const cameraWithFlashEmoji = String.fromCodePoint(128248)
     const monoFontStack = `${fontFamily},SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace`
+
     return `<meta charset="utf-8"><div style="color: #d8dee9; font-family: ${monoFontStack};font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;"><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">0. Run command \`Snapcode ${cameraWithFlashEmoji}\`</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">1. Copy some code</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">2. Paste into Snapcode view</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">3. Click the button ${cameraWithFlashEmoji}</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div></div></div>`
   }
 
-  const serializeBlob = (blob, cb) => {
+  function serializeBlob(blob, cb) {
     const fileReader = new FileReader()
 
     fileReader.onload = () => {
@@ -36,40 +34,14 @@
     fileReader.readAsArrayBuffer(blob)
   }
 
-  function shoot(serializedBlob) {
-    vscode.postMessage({
-      type: 'shoot',
-      data: {
-        serializedBlob
-      }
-    })
-  }
-
-  function getBrightness(hexColor) {
-    const rgb = parseInt(hexColor.slice(1), 16)
-    const r = (rgb >> 16) & 0xff
-    const g = (rgb >> 8) & 0xff
-    const b = (rgb >> 0) & 0xff
-    return (r * 299 + g * 587 + b * 114) / 1000
-  }
-  function isDark(hexColor) {
-    return getBrightness(hexColor) < 128
-  }
   function getSnippetBgColor(html) {
     const match = html.match(/background-color: (#[a-fA-F0-9]+)/)
-    return match ? match[1] : undefined;
+    return match ? match[1] : undefined
   }
 
   function updateEnvironment(snippetBgColor) {
     // update snippet bg color
     document.getElementById('snippet').style.backgroundColor = snippetBgColor
-
-    // update backdrop color
-    if (isDark(snippetBgColor)) {
-      snippetContainerNode.style.backgroundColor = '#f2f2f2'
-    } else {
-      snippetContainerNode.style.background = 'none'
-    }
   }
 
   function getMinIndent(code) {
@@ -97,9 +69,16 @@
     return doc.body.innerHTML
   }
 
+  function updateSizeInfo() {
+    const width = snippetContainerNode.offsetWidth
+    const height = snippetContainerNode.offsetHeight
+    sizeNode.textContent = width + 'x' + height
+  }
+
+  window.addEventListener('resize', updateSizeInfo);
+
   document.addEventListener('paste', e => {
     const innerHTML = e.clipboardData.getData('text/html')
-
     const code = e.clipboardData.getData('text/plain')
     const minIndent = getMinIndent(code)
 
@@ -120,18 +99,15 @@
       snippetNode.innerHTML = innerHTML
     }
 
+    updateSizeInfo()
     vscode.setState({ innerHTML })
   })
 
   obturateur.addEventListener('click', () => {
-    if (target === 'container') {
-      shootAll() 
-    } else {
-      shootSnippet()
-    }
+    shoot()
   })
 
-  function shootAll() {
+  function shoot() {
     const width = snippetContainerNode.offsetWidth * 2
     const height = snippetContainerNode.offsetHeight * 2
     const config = {
@@ -139,47 +115,21 @@
       height,
       style: {
         transform: 'scale(2)',
-        'transform-origin': 'center',
-        background: getRgba(backgroundColor, transparentBackground)
-      }
-    }
-
-    // Hide resizer before capture
-    snippetNode.style.resize = 'none'
-    snippetContainerNode.style.resize = 'none'
-
-    domtoimage.toBlob(snippetContainerNode, config).then(blob => {
-      snippetNode.style.resize = ''
-      snippetContainerNode.style.resize = ''
-      serializeBlob(blob, serializedBlob => {
-        shoot(serializedBlob)
-      })
-    })
-  }
-
-  function shootSnippet() {
-    const width = snippetNode.offsetWidth * 2
-    const height = snippetNode.offsetHeight * 2
-    const config = {
-      width,
-      height,
-      style: {
-        transform: 'scale(2)',
-        'transform-origin': 'center',
-        padding: 0,
+        'transform-origin': 'top left',
         background: 'none'
       }
     }
 
-    // Hide resizer before capture
-    snippetNode.style.resize = 'none'
-    snippetContainerNode.style.resize = 'none'
-
+    sizeNode.style.display = 'none'
     domtoimage.toBlob(snippetContainerNode, config).then(blob => {
-      snippetNode.style.resize = ''
-      snippetContainerNode.style.resize = ''
+      sizeNode.style.display = ''
       serializeBlob(blob, serializedBlob => {
-        shoot(serializedBlob)
+        vscode.postMessage({
+          type: 'shoot',
+          data: {
+            serializedBlob
+          }
+        })
       })
     })
   }
@@ -211,19 +161,11 @@
   window.addEventListener('message', e => {
     if (e) {
       if (e.data.type === 'init') {
-        const { fontFamily, bgColor } = e.data
+        const { fontFamily } = e.data
 
         const initialHtml = getInitialHtml(fontFamily)
         snippetNode.innerHTML = initialHtml
         vscode.setState({ innerHTML: initialHtml })
-
-        // update backdrop color, using bgColor from last pasted snippet
-        // cannot deduce from initialHtml since it's always using Nord color
-        if (isDark(bgColor)) {
-          snippetContainerNode.style.backgroundColor = '#f2f2f2'
-        } else {
-          snippetContainerNode.style.background = 'none'
-        }
 
       } else if (e.data.type === 'update') {
         document.execCommand('paste')
@@ -233,11 +175,6 @@
       } else if (e.data.type === 'restoreBgColor') {
         updateEnvironment(e.data.bgColor)
       } else if (e.data.type === 'updateSettings') {
-        snippetNode.style.boxShadow = e.data.shadow
-        target = e.data.target
-        transparentBackground = e.data.transparentBackground
-        snippetContainerNode.style.backgroundColor = e.data.backgroundColor
-        backgroundColor = e.data.backgroundColor
         if (e.data.ligature) {
           snippetNode.style.fontVariantLigatures = 'normal'
         } else {
@@ -248,11 +185,3 @@
   })
 })()
 
-function getRgba(hex, transparentBackground) {
-  const bigint = parseInt(hex.slice(1), 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  const a = transparentBackground ? 0 : 1
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}

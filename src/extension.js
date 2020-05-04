@@ -63,7 +63,7 @@ function activate(context) {
   })
 
   vscode.workspace.onDidChangeConfiguration(e => {
-    if (e.affectsConfiguration('snapcode') || e.affectsConfiguration('editor')) {
+    if (e.affectsConfiguration('editor')) {
       syncSettings()
     }
   })
@@ -107,14 +107,9 @@ function activate(context) {
   }
 
   function syncSettings() {
-    const settings = vscode.workspace.getConfiguration('snapcode')
     const editorSettings = vscode.workspace.getConfiguration('editor', null)
     panel.webview.postMessage({
       type: 'updateSettings',
-      shadow: settings.get('shadow'),
-      transparentBackground: settings.get('transparentBackground'),
-      backgroundColor: settings.get('backgroundColor'),
-      target: settings.get('target'),
       ligature: editorSettings.get('fontLigatures')
     })
   }
