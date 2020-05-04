@@ -1,4 +1,8 @@
 # Changelog
+### 1.1.0 | 2020-05-04
+
+- Remove settings, always have box shadow and transparent background
+
 ### 1.0.0 | 2018-05-03
 
 - Fork from origin repo

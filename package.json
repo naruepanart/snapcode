@@ -2,7 +2,7 @@
   "name": "snapcode",
   "displayName": "Snapcode",
   "description": "📸  Snapcode for your code",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/moyus/snapcode.git"
@@ -38,41 +38,7 @@
         "command": "snapcode.activate",
         "title": "Snapcode 📸"
       }
-    ],
-    "configuration": {
-      "title": "Snapcode",
-      "properties": {
-        "snapcode.shadow": {
-          "type": "string",
-          "description": "Shadow of the snippet node. Use any value for CSS `box-shadow`",
-          "default": "rgba(0, 0, 0, 0.3) 0px 15px 30px"
-        },
-        "snapcode.transparentBackground": {
-          "type": "boolean",
-          "description": "Transparent background for containers",
-          "default": false
-        },
-        "snapcode.backgroundColor": {
-          "type": "string",
-          "description": "Background color of snippet container. Use any value for CSS `background-color`",
-          "format": "color-hex",
-          "default": "#fff"
-        },
-        "snapcode.target": {
-          "type": "string",
-          "description": "Shoot with or without container",
-          "default": "container",
-          "enum": [
-            "container",
-            "snippet"
-          ],
-          "enumDescriptions": [
-            "Shoot with the container.",
-            "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"snapcode.transparentBackground\": true`"
-          ]
-        }
-      }
-    }
+    ]
   },
   "devDependencies": {
     "@types/node": "^11.12.0",
