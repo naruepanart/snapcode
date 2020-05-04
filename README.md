@@ -5,7 +5,7 @@ This is a customized fork of [octref/polacode](https://github.com/octref/polacod
 - Remove container background, make it transparent
 - Modify content box-shadow, make it more smooth
 
-![Demo](./demo/code.png)
+![](./demo/1.png)
 
 ## Why?
 
