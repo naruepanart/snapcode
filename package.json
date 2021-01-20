@@ -1,15 +1,15 @@
 {
   "name": "snapcode",
-  "displayName": "Snapcode",
-  "description": "📸  Snapcode for your code",
-  "version": "1.1.0",
+  "displayName": "Snapcode Clean",
+  "description": "Snapcode Clean for your code",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moyus/snapcode.git"
+    "url": "https://github.com/naruepanart/snapcodeclean.git"
   },
   "publisher": "moyu",
   "keywords": [
-    "snapcode",
+    "snapcode clean",
     "polacode",
     "polaroid",
     "screenshot",
@@ -36,7 +36,7 @@
     "commands": [
       {
         "command": "snapcode.activate",
-        "title": "Snapcode 📸"
+        "title": "Snapcode Clean"
       }
     ]
   },

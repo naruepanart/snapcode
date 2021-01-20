@@ -8,7 +8,7 @@ const writeSerializedBlobToFile = (serializeBlob, fileName) => {
   fs.writeFileSync(fileName, Buffer.from(bytes))
 }
 
-const P_TITLE = 'Snapcode 📸'
+const P_TITLE = 'Snapcode Clean'
 
 /**
  * @param {vscode.ExtensionContext} context

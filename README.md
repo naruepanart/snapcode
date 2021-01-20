@@ -1,9 +1,10 @@
-# Snapcode
+# Snapcode Clean
 
 This is a customized fork of [octref/polacode](https://github.com/octref/polacode)
 
 - Remove container background, make it transparent
 - Modify content box-shadow, make it more smooth
+- Remove box-shadow
 
 ![](./demo/code.png)
 
